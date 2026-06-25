@@ -63,4 +63,9 @@ class Request
     {
         $this->params = $params;
     }
+
+    public function getFiles(): array
+    {
+        return $this->files;
+    }
 }
