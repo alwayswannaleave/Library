@@ -1,14 +1,9 @@
 <?php
 
 use App\Controllers\AuthController;
+use App\Controllers\UserController;
 
 return [
-    [
-        'method' => 'POST',
-        'path' => '/auth/login',
-        'controller' => AuthController::class,
-        'action' => 'login',
-    ],
     [
         'method' => 'POST',
         'path' => '/auth/register',
@@ -16,9 +11,22 @@ return [
         'action' => 'register',
     ],
     [
-        'method' => 'GET',
-        'path' => '/test',
+        'method' => 'POST',
+        'path' => '/auth/login',
         'controller' => AuthController::class,
         'action' => 'login',
+    ],
+
+    [
+        'method' => 'GET',
+        'path' => '/users',
+        'controller' => UserController::class,
+        'action' => 'index',
+    ],
+    [
+        'method' => 'POST',
+        'path' => '/users/{id}/access',
+        'controller' => UserController::class,
+        'action' => 'grantAccess',
     ],
 ];

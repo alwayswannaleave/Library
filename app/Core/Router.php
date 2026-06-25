@@ -17,26 +17,28 @@ class Router
         $uri = $request->getUri();
 
         foreach ($this->routes as $route) {
-            if ($route['method'] !== $method || $route['path'] !== $uri) {
+            $pattern = preg_replace('/\{[a-zA-Z0-9_]+\}/', '([0-9]+)', $route['path']);
+            $pattern = '#^' . $pattern . '$#';
+
+            if ($route['method'] !== $method) {
                 continue;
             }
 
-            $controllerClass = $route['controller'];
+            if (preg_match($pattern, $uri, $matches)) {
+                array_shift($matches);
 
-            if (!class_exists($controllerClass)) {
-                http_response_code(500);
-                return ['error' => "Controller $controllerClass not found"];
+                $paramNames = [];
+                preg_match_all('/\{([a-zA-Z0-9_]+)\}/', $route['path'], $paramNames);
+                $params = [];
+                foreach ($paramNames[1] as $index => $name) {
+                    $params[$name] = $matches[$index] ?? null;
+                }
+                $request->setParams($params);
+
+                $controller = new $route['controller']();
+                $action = $route['action'];
+                return $controller->$action($request);
             }
-
-            $controller = new $controllerClass();
-            $action = $route['action'];
-
-            if (!method_exists($controller, $action)) {
-                http_response_code(500);
-                return ['error' => "Method $action not found in $controllerClass"];
-            }
-
-            return $controller->$action($request);
         }
 
         http_response_code(404);
