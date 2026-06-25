@@ -16,16 +16,27 @@ class Router
         $method = $request->getMethod();
         $uri = $request->getUri();
 
-        error_log("Method: $method, URI: $uri");
-
         foreach ($this->routes as $route) {
-            error_log('Comparing with: ' . $route['method'] . ' ' . $route['path']);
-
-            if ($route['method'] === $method && $route['path'] === $uri) {
-                $controller = new $route['controller']();
-                $action = $route['action'];
-                return $controller->$action($request);
+            if ($route['method'] !== $method || $route['path'] !== $uri) {
+                continue;
             }
+
+            $controllerClass = $route['controller'];
+
+            if (!class_exists($controllerClass)) {
+                http_response_code(500);
+                return ['error' => "Controller $controllerClass not found"];
+            }
+
+            $controller = new $controllerClass();
+            $action = $route['action'];
+
+            if (!method_exists($controller, $action)) {
+                http_response_code(500);
+                return ['error' => "Method $action not found in $controllerClass"];
+            }
+
+            return $controller->$action($request);
         }
 
         http_response_code(404);

@@ -1,7 +1,3 @@
-curl -X POST http://localhost:8000/auth/login \
+curl -X POST http://localhost:8000/auth/login 
   -H "Content-Type: application/json" \
-  -d '{"login":"test","password":"123"}'
-
-curl -X POST http://localhost:8000/auth/login
-
-curl -X GET http://localhost:8000/test
+  -d '{"login":"john","password":"123456"}'

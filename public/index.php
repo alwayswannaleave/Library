@@ -1,6 +1,10 @@
 <?php
 
+error_reporting(E_ALL); ini_set('display_errors', 1);
+
 require_once __DIR__ . '/../vendor/autoload.php';
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
+$dotenv->load();
 
 use App\Core\Router;
 use App\Core\Request;
@@ -32,5 +36,3 @@ try {
     http_response_code(500);
     echo json_encode(['error' => $e->getMessage()]);
 }
-
-$config = require __DIR__ . '/../config/database.php';

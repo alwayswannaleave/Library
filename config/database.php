@@ -1,10 +1,10 @@
 <?php
 
 return [
-    'host' => getenv('DB_HOST') ?: 'localhost',
-    'port' => getenv('DB_PORT') ?: '3306',
-    'database' => getenv('DB_NAME') ?: 'Library',
-    'username' => getenv('DB_USER') ?: 'root',
-    'password' => getenv('DB_PASSWORD') ?: '',
+    'host' => $_ENV['DB_HOST'] ?: 'localhost',
+    'port' => $_ENV['DB_PORT'] ?: '3306',
+    'database' => $_ENV['DB_NAME'] ?: 'Library',
+    'username' => $_ENV['DB_USER'] ?: 'root',
+    'password' => $_ENV['DB_PASSWORD'] ?: 'root',
     'charset' => 'utf8mb4',
 ];
