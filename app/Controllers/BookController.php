@@ -160,4 +160,28 @@ class BookController
 
         return $result;
     }
+
+    public function getUserBooks(Request $request): array
+    {
+        $currentUserId = $this->getUserIdFromToken($request);
+        if (!$currentUserId) {
+            http_response_code(401);
+            return ['error' => 'Unauthorized'];
+        }
+
+        $ownerUserId = (int) $request->getParam('id');
+        if (!$ownerUserId) {
+            http_response_code(400);
+            return ['error' => 'User ID is required'];
+        }
+
+        $result = $this->bookService->getUserBooksById($ownerUserId, $currentUserId);
+
+        if (isset($result['error'])) {
+            http_response_code(403);
+            return $result;
+        }
+
+        return $result;
+    }
 }

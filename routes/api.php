@@ -32,6 +32,12 @@ return [
         'controller' => UserController::class,
         'action' => 'grantAccess',
     ],
+    [
+        'method' => 'GET',
+        'path' => '/users/{id}/books',
+        'controller' => BookController::class,
+        'action' => 'getUserBooks',
+    ],
 
     //Books
     [

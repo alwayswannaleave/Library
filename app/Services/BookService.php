@@ -147,4 +147,33 @@ class BookService
 
         return ['message' => 'Book restored successfully'];
     }
+
+    public function getUserBooksById(int $ownerUserId, int $currentUserId): array
+    {
+        if ($ownerUserId === $currentUserId) {
+            $books = $this->bookRepository->findByUserId($ownerUserId);
+            return $this->formatBooksResponse($books);
+        }
+
+        $accessRepo = new \App\Repositories\AccessRepository();
+        if (!$accessRepo->hasAccess($ownerUserId, $currentUserId)) {
+            return ['error' => 'Access denied'];
+        }
+
+        $books = $this->bookRepository->findByUserId($ownerUserId);
+        return $this->formatBooksResponse($books);
+    }
+
+    private function formatBooksResponse(array $books): array
+    {
+        $result = [];
+        foreach ($books as $book) {
+            $result[] = [
+                'id' => $book->getId(),
+                'title' => $book->getTitle(),
+                'created_at' => $book->getCreatedAt(),
+            ];
+        }
+        return ['books' => $result];
+    }
 }

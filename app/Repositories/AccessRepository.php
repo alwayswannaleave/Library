@@ -28,21 +28,6 @@ class AccessRepository
         ]);
     }
 
-    public function hasAccess(int $ownerUserId, int $grantedUserId): bool
-    {
-        $stmt = $this->db->prepare('
-            SELECT COUNT(*) FROM accesses
-            WHERE owner_user_id = :owner_user_id
-            AND granted_user_id = :granted_user_id
-        ');
-        $stmt->execute([
-            'owner_user_id' => $ownerUserId,
-            'granted_user_id' => $grantedUserId,
-        ]);
-
-        return (int) $stmt->fetchColumn() > 0;
-    }
-
     public function findByOwner(int $ownerUserId): array
     {
         $stmt = $this->db->prepare('
@@ -60,5 +45,20 @@ class AccessRepository
             );
         }
         return $accesses;
+    }
+
+    public function hasAccess(int $ownerUserId, int $grantedUserId): bool
+    {
+        $stmt = $this->db->prepare('
+            SELECT COUNT(*) FROM accesses
+            WHERE owner_user_id = :owner_user_id
+            AND granted_user_id = :granted_user_id
+        ');
+        $stmt->execute([
+            'owner_user_id' => $ownerUserId,
+            'granted_user_id' => $grantedUserId,
+        ]);
+
+        return (int) $stmt->fetchColumn() > 0;
     }
 }
