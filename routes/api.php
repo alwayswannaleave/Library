@@ -2,6 +2,7 @@
 
 use App\Controllers\AuthController;
 use App\Controllers\BookController;
+use App\Controllers\ExternalBookController;
 use App\Controllers\UserController;
 
 return [
@@ -75,5 +76,19 @@ return [
         'path' => '/books/{id}/restore',
         'controller' => BookController::class,
         'action' => 'restore',
+    ],
+
+    //External books
+    [
+        'method' => 'GET',
+        'path' => '/external/books',
+        'controller' => ExternalBookController::class,
+        'action' => 'search',
+    ],
+    [
+        'method' => 'POST',
+        'path' => '/external/books/{id}/save',
+        'controller' => ExternalBookController::class,
+        'action' => 'save',
     ],
 ];

@@ -22,11 +22,18 @@ class BookRepository
             VALUES (:user_id, :title, :content)
         ');
 
-        return $stmt->execute([
+        $result = $stmt->execute([
             'user_id' => $book->getUserId(),
             'title' => $book->getTitle(),
             'content' => $book->getContent(),
         ]);
+
+        if ($result) {
+            $id = (int) $this->db->lastInsertId();
+            $book->setId($id);
+        }
+
+        return $result;
     }
 
     public function findById(int $id): ?Book
