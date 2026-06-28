@@ -33,14 +33,14 @@ return [
         'controller' => UserController::class,
         'action' => 'grantAccess',
     ],
+
+    //Books
     [
         'method' => 'GET',
         'path' => '/users/{id}/books',
         'controller' => BookController::class,
         'action' => 'getUserBooks',
     ],
-
-    //Books
     [
         'method' => 'GET',
         'path' => '/books',

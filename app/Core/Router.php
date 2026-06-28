@@ -41,7 +41,6 @@ class Router
             }
         }
 
-        http_response_code(404);
-        return ['error' => 'Route not found'];
+        throw new \Exception('Route not found', 404);
     }
 }

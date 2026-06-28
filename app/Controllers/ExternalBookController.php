@@ -28,21 +28,18 @@ class ExternalBookController
     {
         $userId = $this->getUserIdFromToken($request);
         if (!$userId) {
-            http_response_code(401);
-            return ['error' => 'Unauthorized'];
+           throw new \Exception('Unauthorized', 401);
         }
 
         $query = $request->get('q');
         if (empty($query)) {
-            http_response_code(400);
-            return ['error' => 'Search query is required'];
+            throw new \Exception('Search query is required', 400);
         }
 
         $result = $this->externalBookService->searchBooks($query);
 
         if (isset($result['error'])) {
-            http_response_code(404);
-            return $result;
+            throw new \Exception($result['error'], 404);
         }
 
         return $result;
@@ -52,29 +49,25 @@ class ExternalBookController
     {
         $userId = $this->getUserIdFromToken($request);
         if (!$userId) {
-            http_response_code(401);
-            return ['error' => 'Unauthorized'];
+            throw new \Exception('Unauthorized', 401);
         }
 
         $externalId = $request->getParam('id');
         if (empty($externalId)) {
-            http_response_code(400);
-            return ['error' => 'Book ID is required'];
+            throw new \Exception('Book ID is required', 400);
         }
 
         $data = $request->all();
         $searchResults = $data['search_results'] ?? [];
 
         if (empty($searchResults)) {
-            http_response_code(400);
-            return ['error' => 'Search results are required'];
+            throw new \Exception('Search results are required', 400);
         }
 
         $result = $this->externalBookService->saveBook($userId, $externalId, $searchResults);
 
         if (isset($result['error'])) {
-            http_response_code(400);
-            return $result;
+            throw new \Exception($result['error'], 400);
         }
 
         return $result;

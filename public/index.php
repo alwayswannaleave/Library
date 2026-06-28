@@ -20,6 +20,6 @@ try {
     $response = $router->dispatch($request);
     echo json_encode($response);
 } catch (Exception $e) {
-    http_response_code(500);
+    http_response_code($e->getCode() ?: 500);
     echo json_encode(['error' => $e->getMessage()]);
 }

@@ -25,8 +25,7 @@ class AuthController
         $result = $this->authService->register($login, $password, $passwordConfirmation);
 
         if (isset($result['error'])) {
-            http_response_code(400);
-            return $result;
+            throw new \Exception($result['error'], 404);
         }
 
         return $result;
@@ -42,8 +41,7 @@ class AuthController
         $result = $this->authService->login($login, $password);
 
         if (isset($result['error'])) {
-            http_response_code(401);
-            return $result;
+            throw new \Exception($result['error'], 404);
         }
 
         return $result;

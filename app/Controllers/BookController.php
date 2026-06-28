@@ -29,8 +29,7 @@ class BookController
     {
         $userId = $this->getUserIdFromToken($request);
         if (!$userId) {
-            http_response_code(401);
-            return ['error' => 'Unauthorized'];
+            throw new \Exception('Unauthorized', 401);
         }
 
         return $this->bookService->getUserBooks($userId);
@@ -40,8 +39,7 @@ class BookController
     {
         $userId = $this->getUserIdFromToken($request);
         if (!$userId) {
-            http_response_code(401);
-            return ['error' => 'Unauthorized'];
+            throw new \Exception('Unauthorized', 401);
         }
 
         $data = $request->all();
@@ -54,8 +52,7 @@ class BookController
         $result = $this->bookService->createBook($userId, $title, $content, $file);
 
         if (isset($result['error'])) {
-            http_response_code(400);
-            return $result;
+            throw new \Exception($result['error'], 400);
         }
 
         return $result;
@@ -65,21 +62,18 @@ class BookController
     {
         $userId = $this->getUserIdFromToken($request);
         if (!$userId) {
-            http_response_code(401);
-            return ['error' => 'Unauthorized'];
+            throw new \Exception('Unauthorized', 401);
         }
 
         $id = (int) $request->getParam('id');
         if (!$id) {
-            http_response_code(400);
-            return ['error' => 'Book ID is required'];
+            throw new \Exception('Book ID is required', 400);
         }
 
         $result = $this->bookService->getBook($id, $userId);
 
         if (isset($result['error'])) {
-            http_response_code(404);
-            return $result;
+            throw new \Exception($result['error'], 404);
         }
 
         return $result;
@@ -89,14 +83,12 @@ class BookController
     {
         $userId = $this->getUserIdFromToken($request);
         if (!$userId) {
-            http_response_code(401);
-            return ['error' => 'Unauthorized'];
+            throw new \Exception('Unauthorized', 401);
         }
 
         $id = (int) $request->getParam('id');
         if (!$id) {
-            http_response_code(400);
-            return ['error' => 'Book ID is required'];
+            throw new \Exception('Book ID is required', 400);
         }
 
         $data = $request->all();
@@ -106,8 +98,7 @@ class BookController
         $result = $this->bookService->updateBook($id, $userId, $title, $content);
 
         if (isset($result['error'])) {
-            http_response_code(400);
-            return $result;
+            throw new \Exception($result['error'], 400);
         }
 
         return $result;
@@ -117,21 +108,18 @@ class BookController
     {
         $userId = $this->getUserIdFromToken($request);
         if (!$userId) {
-            http_response_code(401);
-            return ['error' => 'Unauthorized'];
+            throw new \Exception('Unauthorized', 401);
         }
 
         $id = (int) $request->getParam('id');
         if (!$id) {
-            http_response_code(400);
-            return ['error' => 'Book ID is required'];
+            throw new \Exception('Book ID is required', 400);
         }
 
         $result = $this->bookService->deleteBook($id, $userId);
 
         if (isset($result['error'])) {
-            http_response_code(404);
-            return $result;
+            throw new \Exception($result['error'], 400);
         }
 
         return $result;
@@ -141,21 +129,18 @@ class BookController
     {
         $userId = $this->getUserIdFromToken($request);
         if (!$userId) {
-            http_response_code(401);
-            return ['error' => 'Unauthorized'];
+            throw new \Exception('Unauthorized', 401);
         }
 
         $id = (int) $request->getParam('id');
         if (!$id) {
-            http_response_code(400);
-            return ['error' => 'Book ID is required'];
+            throw new \Exception('Book ID is required', 400);
         }
 
         $result = $this->bookService->restoreBook($id, $userId);
 
         if (isset($result['error'])) {
-            http_response_code(404);
-            return $result;
+            throw new \Exception($result['error'], 400);
         }
 
         return $result;
@@ -165,21 +150,18 @@ class BookController
     {
         $currentUserId = $this->getUserIdFromToken($request);
         if (!$currentUserId) {
-            http_response_code(401);
-            return ['error' => 'Unauthorized'];
+            throw new \Exception('Unauthorized', 401);
         }
 
         $ownerUserId = (int) $request->getParam('id');
         if (!$ownerUserId) {
-            http_response_code(400);
-            return ['error' => 'User ID is required'];
+            throw new \Exception('Book ID is required', 400);
         }
 
         $result = $this->bookService->getUserBooksById($ownerUserId, $currentUserId);
 
         if (isset($result['error'])) {
-            http_response_code(403);
-            return $result;
+            throw new \Exception($result['error'], 400);
         }
 
         return $result;

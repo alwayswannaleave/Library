@@ -32,8 +32,7 @@ class UserController
     {
         $userId = $this->getUserIdFromToken($request);
         if (!$userId) {
-            http_response_code(401);
-            return ['error' => 'Unauthorized'];
+            throw new \Exception('Unauthorized', 401);
         }
 
         $users = $this->userRepository->findAll();
@@ -53,21 +52,19 @@ class UserController
     {
         $userId = $this->getUserIdFromToken($request);
         if (!$userId) {
-            http_response_code(401);
-            return ['error' => 'Unauthorized'];
+            throw new \Exception('Unauthorized', 401);
         }
 
         $grantedUserId = (int) $request->getParam('id');
         if (!$grantedUserId) {
-            http_response_code(400);
-            return ['error' => 'User ID is required'];
+            throw new \Exception('User ID is required', 400);
         }
 
         $result = $this->accessService->grantAccess($userId, $grantedUserId);
 
         if (isset($result['error'])) {
-            http_response_code(400);
-            return $result;
+            throw new \Exception($result['error'], 400);
+
         }
 
         return $result;
