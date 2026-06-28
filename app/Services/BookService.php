@@ -143,6 +143,7 @@ class BookService
         $restored = $this->bookRepository->restore($id, $userId);
 
         if (!$restored) {
+            return ['error' => 'Book not found or already restored'];
         }
 
         return ['message' => 'Book restored successfully'];
